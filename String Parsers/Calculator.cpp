@@ -227,5 +227,4 @@ int main(void)
         system("clear");
     }
     while (1);
-    // cout << 61/ 3;
 }

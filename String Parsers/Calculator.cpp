@@ -8,7 +8,6 @@
 // instead of importing the whole namespace including individual namespaces
 using std::cin;
 using std::cout;
-using std::stoi;
 using std::endl;
 using std::string;
 using std::streamsize;
@@ -16,8 +15,8 @@ using std::stringstream;
 using std::runtime_error;
 using std::numeric_limits;
 
-#define MAX 400.0
-#define INT 48.0 // this will be used while converting char to int
+#define MAX 400
+#define INT 48 // this will be used while converting char to int
 
 class Num// for storing numbers
 {

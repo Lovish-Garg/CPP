@@ -94,6 +94,12 @@ class Stack
         //changing data at position in Stack
         void change(int pos, int data)
         {
+            if (isEmpty())
+            {
+                cout << "Stack is Empty\n";
+                return;
+            }
+            
             arr[pos] = data;
             cout << "Item changed at location " << pos << endl;
         }

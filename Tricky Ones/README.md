@@ -1,2 +1,2 @@
 # Tricky Ones
-  In this folder I have uploaded problems which require some other way (just like maathematical) to solve these problems.
+  In this folder I have uploaded problems which require some other way (just like mathematical) to solve these problems.

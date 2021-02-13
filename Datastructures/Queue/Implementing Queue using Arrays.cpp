@@ -103,6 +103,11 @@ class Queue
                 cout << arr[i] << " ";
 
         }
+    
+        ~Queue()
+        {
+            delete []arr;
+        }       
 };
 
 void menu()

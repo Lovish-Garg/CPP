@@ -114,13 +114,20 @@ class Single_list
 
             newNode->link = head;
             head = newNode;
-
+            tail = newNode;
+            
             cout << "Node Prepended\n";
         }
 
         // insert a node after a node of specific value
         void insertNodeAfter(int search, int key, int data)
         {
+            // if key is found then return
+            if (nodeExists(key))
+            {
+                cout << "Same Keys Not Allowed\n";
+                return;
+            }
             // here if the key exists then it will return that Node 
             Node *ptr = nodeExists(search);
             

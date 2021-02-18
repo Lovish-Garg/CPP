@@ -112,13 +112,20 @@ class Single_list
             // else
             Node *newNode = new Node(key, data);
 
-            newNode->next = head;
-            head->prev = newNode;
-            head = newNode;
-
-            // if this is the first node 
-            if (newNode->next == NULL)
+            // if the list was empty
+            if (head == NULL)
+            {
+                head = newNode;
                 tail = newNode;
+
+                return;
+            }
+            else
+            {
+                newNode->next = head;
+                head->prev = newNode;
+                head = newNode;
+            }
 
             cout << "Node Prepended\n";
         }
@@ -132,7 +139,7 @@ class Single_list
                 cout << "Same Keys Not Allowed\n";
                 return;
             }
-            // here if the key exists then it will return that Node 
+            // here if the search key exists then it will return that Node 
             Node *ptr = nodeExists(search);
             
             // if ptr == NULL
@@ -148,15 +155,61 @@ class Single_list
             newNode->prev = ptr;
             ptr->next = newNode;
 
-            // if newNode is the last Node in the list
-            if (newNode->next == NULL)
+            // if the next node isnot NULL
+            if (ptr->next)
+                ptr->next->prev = newNode;
+
+            else// means that it was the last node
                 tail = newNode;
 
             cout << "Node inserted\n";
         }
 
+        void insertNodeBefore(int search, int key, int data)
+        {
+            // if key exists
+            if (nodeExists(key))
+            {
+                cout << "Same Keys Not Allowed\n";
+                return;
+            }
+            // here if the key exists then it will return that Node 
+            Node *ptr = nodeExists(search);
+            // if ptr == NULL
+            if (!ptr)
+            {
+                cout << "Key doesnot exist\n";
+                return;
+            }
+
+            Node *newNode = new Node(key, data);
+            
+            // if ptr is head or we are going to insert node to head
+            if (ptr == head)
+            {
+                newNode->next = head;
+                ptr->prev = newNode;
+                head = newNode;
+            }
+            else
+            {
+                newNode->next = ptr;
+                ptr->prev = newNode;
+                ptr->prev->next = newNode;
+            }
+            cout << "Node inserted\n";
+        }
+
         void deleteNodeByKey(int key)
         {
+            Node *del = nodeExists(key);
+
+            if (!del)
+            {
+                cout << "Invalid Key\n";
+                return;
+            }
+
             // if head == NULL
             if (!head)
             {
@@ -168,15 +221,23 @@ class Single_list
             if (head->key == key)
             {
                 Node *del = head;
-                head = head->next;
-                head->prev = NULL;
-                cout << "Node with Key " << key  << " is deleted\n";
-
-                // means the node we are deleting was the last then tail = NULL
-                if (tail == del)
+            
+                // head == NULL
+                if (!head->next)
+                {
                     tail = NULL;
+                    head = NULL;
 
-                delete del;
+                    delete del;
+                }
+                else
+                {
+                    head = head->next;
+                    head->prev = NULL;
+                    delete del;
+                }
+
+                cout << "Node with Key " << key  << " is deleted\n";
                 return;
             }
 
@@ -187,44 +248,25 @@ class Single_list
                 // then return
                 return;
             }
+            else
+            {
+                Node *nextNode = del->next;
+                Node *prevNode = del->prev;
 
-            // else
-            Node *del = NULL;// to store address to be deleted
-            Node *currentptr = head->next;// to store the next of previous
-
-            while (currentptr)
-            {   
-                if (currentptr->key == key)
+                if (nextNode == NULL)
                 {
-                    del = currentptr;
-                    break;
+                    tail = prevNode;
+                    prevNode->next = NULL;
+                }
+                else
+                {
+                    prevNode->next = nextNode;
+                    nextNode->prev = prevNode;
                 }
 
-                currentptr = currentptr->next;
             }
-
-            // if key not found
-            if (!del)
-            {
-                cout << "Invalid Key to delete Node\n";
-                return;
-            }
-            // means if I'm deleting the last Node
-            if (del == tail)
-                tail = del->prev;
             
-            Node *prev = currentptr->prev;
-            prev->next = currentptr->next;
-
-            // if next is a valid address
-            if (currentptr->next)
-            {
-                Node *next = currentptr->next;
-                next->prev = prev;
-            }
-
             delete del;
-
             cout << "Node with Key " << key << " is deleted\n";
         }
 
@@ -281,7 +323,7 @@ class Single_list
 
 void menu()
 {
-    cout << "Input 0 for Exit\nInput 1 for Appending\nInput 2 for Prepending\nInput 3 for Inserting Node after a Key\nInput 4 to Check if a Node Exists with Specific Key\nInput 5 to Delete a Node by Key\nInput 6 to Update Node by Key\nInput 7 to display\nInput 8 for clear screen\n\nInput your choice: ";
+    cout << "Input 0 for Exit\nInput 1 for Appending\nInput 2 for Prepending\nInput 3 for Inserting Node after a Key\nInput 4 for Inserting Node before a Key\nInput 5 to Check if a Node Exists with Specific Key\nInput 6 to Delete a Node by Key\nInput 7 to Update Node by Key\nInput 8 to display\nInput 9 for clear screen\n\nInput your choice: ";
 }
 
 int main(void)
@@ -337,6 +379,19 @@ int main(void)
                 break;
 
             case 4:
+                cout << "\nKey(to insert before): ";
+                cin >> key2;
+
+                cout << "\nKey(for Node): ";
+                cin >> key;
+
+                cout << "Data: ";
+                cin >> data;
+
+                list.insertNodeBefore(key2, key, data);
+                break;
+
+            case 5:
                 cout << "\nKey: ";
                 cin >> key;
 
@@ -347,14 +402,14 @@ int main(void)
                     cout << "\nNode not Found\n";
                 break;
 
-            case 5:
+            case 6:
                 cout << "\nKey: ";
                 cin >> key;
 
                 list.deleteNodeByKey(key);
                 break;
 
-            case 6:
+            case 7:
                 cout << "Key: ";
                 cin >> key;
 
@@ -364,11 +419,11 @@ int main(void)
                 list.updateNodeByKey(key, data);
                 break;
 
-            case 7:
+            case 8:
                 list.display();
                 break;
             
-            case 8:
+            case 9:
                 system("clear");// do cls for windows
                 break;
                 
